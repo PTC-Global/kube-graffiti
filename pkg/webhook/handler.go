@@ -85,7 +85,6 @@ func (h graffitiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	ar := admission.AdmissionReview{}
 	d := json.NewDecoder(bytes.NewReader(body))
-	d.DisallowUnknownFields()
 	if err := d.Decode(&ar); err != nil {
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusBadRequest)

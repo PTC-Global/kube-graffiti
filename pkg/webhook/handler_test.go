@@ -65,22 +65,6 @@ func TestWithNonJsonRequest(t *testing.T) {
 	assert.Equal(t, "invalid request - payload is not json", string(respBody))
 }
 
-func TestRequestIsNotAnAdmissionReviewObject(t *testing.T) {
-	reqBody := strings.NewReader(`{"message": "this is not a valid admission review object"}`)
-	req, err := http.NewRequest("POST", "/", reqBody)
-	req.Header.Set("Content-Type", "application/json")
-	assert.NoError(t, err, "We created a valid http request")
-	rr := httptest.NewRecorder()
-	handler := newGraffitiHandler()
-	handler.ServeHTTP(rr, req)
-
-	resp := rr.Result()
-	assert.NotEqual(t, http.StatusOK, resp.StatusCode)
-	assert.Equal(t, "text/plain", resp.Header.Get("Content-Type"))
-	respBody, _ := ioutil.ReadAll(resp.Body)
-	assert.Equal(t, "The request does not contain a valid AdmissionReview object", string(respBody))
-}
-
 func TestCallsMutateWhenPathIsHandled(t *testing.T) {
 	// Set up a GrafittiMutator mock
 	fake := new(mockMutator)
