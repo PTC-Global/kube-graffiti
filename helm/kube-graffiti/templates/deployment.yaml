@@ -19,7 +19,11 @@ spec:
         app: {{ include "kube-graffiti.name" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ include "kube-graffiti.fullname" . }}
+      serviceAccountName: {{ .Release.Name }}-kube-graffiti
+      {{ if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.image.pullSecrets }}
+      {{ end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
